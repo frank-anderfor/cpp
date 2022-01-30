@@ -36,4 +36,5 @@ int main() {
 /*
  * NOTES:
  * There is no % operator for double type numbers in C++
+ * An operator is a C++ keyword. I had to change var name to action to make it work
  */
