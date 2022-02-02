@@ -6,6 +6,7 @@
 
 /* HEADERS */
 #include <iostream>
+#include <string>
 
 /* NAMESPACES */
 using namespace std;
@@ -32,38 +33,35 @@ fieldValue bottomRight = TTT_EMPTY;
 bool playerSwitch = false;
 
 /* PROTOTYPES */
-int checkWin();
+int checkInput(string index);
+
+bool checkWin();
+bool checkGameOver();
+bool checkField(int index);
+
+void playerMove(bool flague);
 
 /* MAIN FUNCTION BODY */
 int main() {
 
-    int input = 0;
+    system("clear");
+    cout << "PROGRAM START\n\n";
 
-    while (true) {
+    do {
 
-        if (playerSwitch) {
-            cout << "Circle move" << endl;
-        } else {
-            cout << "Cross move" << endl;
-        }
+        playerMove(playerSwitch);
 
-        cout << "Gimme some data: "; cin >> input;
+    } while (!checkWin() && !checkGameOver());
 
-        if (playerSwitch) {
-            playerSwitch = false;      
-        } else {
-            playerSwitch = true;
-        }
+    cin.ignore();
 
-        cout << "Winner STATUS: " << checkWin() << endl;
-
-    }
+    cout << "\nPROGRAM END" << endl;
 
     return 0;
 
 }
 
-int checkWin() {
+bool checkWin() {
 
     // horizontal Win
     bool topHorWin = (topLeft == topCenter) && (topLeft == topRight) && (topLeft != TTT_EMPTY);
@@ -79,17 +77,215 @@ int checkWin() {
     bool lftDiaWin = (topLeft == centerCenter) && (topLeft == bottomRight) && (topLeft != TTT_EMPTY);
     bool rgtDiaWin = (bottomLeft == centerCenter) && (bottomLeft == topRight) && (bottomLeft != TTT_EMPTY);
 
+    // winner found - true
     if (topHorWin || cenHorWin || botHorWin ||
         lftVerWin || cenVerWin || rgtVerWin ||
         lftDiaWin || rgtDiaWin)
     {
-        cout << "We have a WINNER!" << endl;
-        return 1;
+        cout << "\nWe have a WINNER!\n\n";
+        return true;
+    }
+    // no winning combinations on the gameboard yet = false
+    else
+    {
+        cout << "\nNo winner yet. . .\n\n";
+        return false;
+    }
+
+}
+
+bool checkGameOver() {
+
+    // no empty fields on the board and no winning combination
+    if (topLeft      != TTT_EMPTY &&
+        topCenter    != TTT_EMPTY &&
+        topRight     != TTT_EMPTY &&
+        centerLeft   != TTT_EMPTY &&
+        centerCenter != TTT_EMPTY &&
+        centerRight  != TTT_EMPTY &&
+        bottomLeft   != TTT_EMPTY &&
+        bottomCenter != TTT_EMPTY &&
+        bottomRight  != TTT_EMPTY &&
+        checkWin()   == false)
+    {
+        cout << "\nDRAW!\n";
+        return true;
+    }
+    // there are still empty fields on the board
+    else
+    {
+        cout << "Still playing. . ." << endl;
+        return false;
+    }
+
+}
+
+int checkInput(string index) {
+
+    int fieldIndex;
+
+    if (index == "1" || index == "2" || index == "3" ||
+        index == "4" || index == "5" || index == "6" ||
+        index == "7" || index == "8" || index == "9")
+    {
+        fieldIndex = stoi(index);
     }
     else
     {
-        cout << "No winner yet. . ." << endl;
-        return 0;
+        fieldIndex = 0;
+    }
+
+    return fieldIndex;
+
+}
+
+bool checkField(int index) {
+
+    fieldValue fieldPlaceholder;
+
+    switch (index) {
+        // top row
+        case 7:
+            fieldPlaceholder = topLeft;
+            break;
+        case 8:
+            fieldPlaceholder = topCenter;
+            break;
+        case 9:
+            fieldPlaceholder = topRight;
+            break;
+        // center row
+        case 4:
+            fieldPlaceholder = centerLeft;
+            break;
+        case 5:
+            fieldPlaceholder = centerCenter;
+            break;
+        case 6:
+            fieldPlaceholder = centerRight;
+            break;
+        // bottom row
+        case 1:
+            fieldPlaceholder = bottomLeft;
+            break;
+        case 2:
+            fieldPlaceholder = bottomCenter;
+            break;
+        case 3:
+            fieldPlaceholder = bottomRight;
+            break;
+        // default for fun
+        default:
+            cout << "Switched to default. . ." << endl;
+            cin.ignore();
+            break;                                                                                                                                                                                                                        
+    }
+
+    if (fieldPlaceholder != TTT_EMPTY) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+void playerMove(bool flague) {
+
+    string playerInput;
+    string playerSide;
+    fieldValue playerSymbol;
+    int fieldIndex;
+
+    // Circle
+    if (flague) {
+        playerSide = "Circle";
+        playerSymbol = TTT_CIRCLE;
+    }
+    // Cross
+    else {
+        playerSide = "Cross";
+        playerSymbol = TTT_CROSS;
+    }
+
+    cout << playerSide << " is moving now. . .\n\n";
+
+    while (true) {
+
+        cout << "Enter the field # [1-9]: "; cin >> playerInput;
+
+        fieldIndex = checkInput(playerInput);
+
+        // user input is different than allowed 1-9 numbers
+        if (fieldIndex == 0) 
+        {
+            cout << "\nIncorrect field # !\n";
+            cin.ignore();
+            continue;
+        } 
+        // user input is correct
+        else 
+        {
+            // checkField == true -> field is not empty
+            if (checkField(fieldIndex)) 
+            {
+                cout << "\nChoosen field is not empty!\n" << endl;
+                cin.ignore();
+                continue;
+            }
+            // check is empty - drawing new symbol inside 
+            else
+            {
+                switch (fieldIndex) {
+                    // top row
+                    case 7:
+                        topLeft = playerSymbol;
+                        break;
+                    case 8:
+                        topCenter = playerSymbol;
+                        break;
+                    case 9:
+                        topRight = playerSymbol;
+                        break;
+                    // center row
+                    case 4:
+                        centerLeft = playerSymbol;
+                        break;
+                    case 5:
+                        centerCenter = playerSymbol;
+                        break;
+                    case 6:
+                        centerRight = playerSymbol;
+                        break;
+                    // bottom row
+                    case 1:
+                        bottomLeft = playerSymbol;
+                        break;
+                    case 2:
+                        bottomCenter = playerSymbol;
+                        break;
+                    case 3:
+                        bottomRight = playerSymbol;
+                        break;
+                    // default for fun
+                    default:
+                        cout << "Switched to default. . ." << endl;
+                        cin.ignore();
+                        break;                                                                                                                                                                                                                        
+                }
+                break;
+            }
+        }
+
+    }
+    // checking and eventually changing global flague status
+    if (flague == playerSwitch) {
+
+        playerSwitch = !playerSwitch;
+
+    } else {
+
+        cout << "\nFlague difference detected!\n" << endl;
+
     }
 
 }
