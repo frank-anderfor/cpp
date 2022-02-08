@@ -28,11 +28,14 @@ fieldValue bottomLeft = TTT_EMPTY;
 fieldValue bottomCenter = TTT_EMPTY;
 fieldValue bottomRight = TTT_EMPTY;
 
+/* FLAGUES */
+bool playerSwitch = false;
 // false - Cross Move
 // true - Circle Move
-bool playerSwitch = false;
 
 /* PROTOTYPES */
+char returnSymbol(fieldValue field);
+
 int checkInput(string index);
 
 bool checkWin();
@@ -40,22 +43,34 @@ bool checkGameOver();
 bool checkField(int index);
 
 void playerMove(bool flague);
+void showBoard();
 
 /* MAIN FUNCTION BODY */
 int main() {
 
     system("clear");
     cout << "PROGRAM START\n\n";
+    cin.ignore();
 
     do {
+
+        system("clear");
+
+        showBoard(); cout << endl;
 
         playerMove(playerSwitch);
 
     } while (!checkWin() && !checkGameOver());
 
     cin.ignore();
+    cin.ignore();
 
     cout << "\nPROGRAM END" << endl;
+
+    cin.ignore();
+    cin.ignore();
+
+    system("clear");
 
     return 0;
 
@@ -220,6 +235,7 @@ void playerMove(bool flague) {
         {
             cout << "\nIncorrect field # !\n";
             cin.ignore();
+            cin.ignore();
             continue;
         } 
         // user input is correct
@@ -289,3 +305,72 @@ void playerMove(bool flague) {
     }
 
 }
+
+char returnSymbol(fieldValue field) {
+
+    if (field == TTT_CIRCLE) {
+        return 'O';
+    } else if (field == TTT_CROSS) {
+        return 'X';
+    } else if (field == TTT_EMPTY) {
+        return ' ';
+    } else {
+        cout << "\n\nUnknown field value provided!\n\n";
+        return 'E';
+    }
+
+}
+
+void showBoard() {
+
+    char tl, tc, tr, cl, cc, cr, bl, bc, br;
+
+    tl = (topLeft      != TTT_EMPTY) ? returnSymbol(topLeft)      : '7';
+    tc = (topCenter    != TTT_EMPTY) ? returnSymbol(topCenter)    : '8';
+    tr = (topRight     != TTT_EMPTY) ? returnSymbol(topRight)     : '9';
+
+    cl = (centerLeft   != TTT_EMPTY) ? returnSymbol(centerLeft)   : '4';
+    cc = (centerCenter != TTT_EMPTY) ? returnSymbol(centerCenter) : '5';
+    cr = (centerRight  != TTT_EMPTY) ? returnSymbol(centerRight)  : '6';
+
+    bl = (bottomLeft   != TTT_EMPTY) ? returnSymbol(bottomLeft)   : '1';
+    bc = (bottomCenter != TTT_EMPTY) ? returnSymbol(bottomCenter) : '2';
+    br = (bottomRight  != TTT_EMPTY) ? returnSymbol(bottomRight)  : '3';
+
+    cout << "                                   " << endl;
+    cout << "   T  I  C    T  A  C    T  O  E   " << endl;
+    cout << "                                   " << endl;
+
+    cout << "|==========||=========||==========|" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+
+    cout << "||--- " << tl << " ---||--- " << tc << " ---||--- " << tr << " ---||" << endl;
+
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "|==========||=========||==========|" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+
+    cout << "||--- " << cl << " ---||--- " << cc << " ---||--- " << cr << " ---||" << endl;
+
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "|==========||=========||==========|" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+
+    cout << "||--- " << bl << " ---||--- " << bc << " ---||--- " << br << " ---||" << endl;
+
+    cout << "||---- ----||---- ----||---- ----||" << endl;
+    cout << "||---------||---------||---------||" << endl;
+    cout << "|==========||=========||==========|" << endl;
+    
+}
+
+/*
+ * NOTES:
+ * I introduce the use of ternary operator to shorten the code of the showBoard () function a bit
+ * This operator has not been in the book so far
+ */
