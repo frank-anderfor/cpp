@@ -1,0 +1,144 @@
+/*
+ * TASK #1
+ * Write a program to simulate coin toss. Run it many times.
+ * Do the results look random in your opinion?
+ */
+
+/* HEADERS */
+#include <iostream>
+// for text justifying in GUI
+#include <iomanip>
+// ctime nad cstdlib for randomness functionalities
+#include <string>
+#include <ctime>
+#include <cstdlib>
+
+/* NAMESPACES */
+using namespace std;
+
+/* GLOBALS */
+int draws;
+int heads;
+int tails;
+
+/* PROTOTYPES */
+int randomRange(int minimum, int maximum);
+
+void tossCoin(int drawNumber);
+void showStats();
+
+/* MAIN */
+int main() {
+
+    int userInput = 0;
+
+    draws = 0;
+    heads = 0;
+    tails = 0;
+
+    srand( time( NULL ) );
+
+    cout << "\nPROGRAM START\n";
+
+    while (true) {
+
+        system("clear");
+
+        showStats();
+
+        cout << " # OF COIN'S TOSS: "; cin >> userInput;
+
+        tossCoin(userInput);
+
+    }
+
+}
+
+/* FUNCTIONS */
+int randomRange(int minimum, int maximum) {
+
+    return rand() % ( maximum - minimum + 1) + minimum;
+
+}
+
+void tossCoin(int drawNumber) {
+
+    int result;
+    bool showResult;
+
+    if (drawNumber == 1) {
+        showResult = true;
+    }
+
+    for (int i=0; i<drawNumber; i++) {
+
+        draws++;
+
+        result = randomRange(0, 1);
+
+        switch (result) {
+
+            case 0:
+                if (showResult) {
+                    cout << "\nYou drew heads !\n";
+                    cin.ignore(); cin.ignore();
+                }
+                heads++;
+                break;
+            case 1:
+                if (showResult) {
+                    cout << "\nYou drew tails !\n";
+                    cin.ignore(); cin.ignore();
+                }
+                tails++;
+                break;
+            default:
+                if (showResult) cout << "\nBad result !\n";
+                cin.ignore(); cin.ignore();
+                break;
+
+        }
+
+    }
+
+}
+
+void showStats() {
+
+    double percDraws, percHeads, percTails;
+
+    percDraws = (draws * 100.0) / draws;
+    percHeads = (heads * 100.0) / draws;
+    percTails = (tails * 100.0) / draws;
+
+    cout << "                                        " << endl;
+    cout << " TOSS A COIN SIMULATOR && STATS COUNTER " << endl;
+    cout << "                                        " << endl;
+    cout << "| # OF DRAWS | # OF HEADS | # OF TAILS |" << endl;
+    cout << "|============|============|============|" << endl;
+    cout << "|";
+    cout << right << setw(11) << draws << " ";
+    cout << "|";
+    cout << right << setw(11) << heads << " ";
+    cout << "|";
+    cout << right << setw(11) << tails << " ";
+    cout << "|";
+    cout << endl;
+    cout << "|============|============|============|" << endl;
+    cout << "|";
+    cout << right << setw(9) << percDraws << " % ";
+    cout << "|";
+    cout << right << setw(9) << percHeads << " % ";
+    cout << "|";
+    cout << right << setw(9) << percTails << " % ";
+    cout << "|";
+    cout << endl;
+    cout << "                                        " << endl;
+
+}
+
+/*
+ * NOTES
+ * I was thinking about how to put nicely numbers growing in time into fixed display space
+ * I found out iomanip library - If it works it is great!
+ */
