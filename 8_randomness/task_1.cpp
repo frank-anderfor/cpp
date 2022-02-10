@@ -8,8 +8,9 @@
 #include <iostream>
 // for text justifying in GUI
 #include <iomanip>
-// ctime nad cstdlib for randomness functionalities
+// for user input validation
 #include <string>
+// ctime nad cstdlib for randomness functionalities
 #include <ctime>
 #include <cstdlib>
 
@@ -23,6 +24,7 @@ int tails;
 
 /* PROTOTYPES */
 int randomRange(int minimum, int maximum);
+int returnInt(string input);
 
 void tossCoin(int drawNumber);
 void showStats();
@@ -30,7 +32,7 @@ void showStats();
 /* MAIN */
 int main() {
 
-    int userInput = 0;
+    string userInput;
 
     draws = 0;
     heads = 0;
@@ -46,11 +48,27 @@ int main() {
 
         showStats();
 
-        cout << " # OF COIN'S TOSS: "; cin >> userInput;
+        do {
 
-        tossCoin(userInput);
+            cout << " # OF COIN TOSS: ";
+
+            cin >> userInput;            
+
+        } while( returnInt(userInput) == -1 );
+
+        if ( returnInt(userInput) == 0 ) break;
+
+        tossCoin( returnInt(userInput) );
 
     }
+
+    cout << "\nPROGRAM END\n";
+
+    cin.ignore(); cin.ignore();
+
+    system("clear");
+
+    return 0;
 
 }
 
@@ -58,6 +76,27 @@ int main() {
 int randomRange(int minimum, int maximum) {
 
     return rand() % ( maximum - minimum + 1) + minimum;
+
+}
+
+int returnInt(string input) {
+
+    for (int i=0; i<input.length(); i++) {
+
+        if ( input[i] < '0' || input[i] > '9' ) {
+
+            cout << "\nYOUR INPUT IS NOT A NUMBER !\n\n";
+
+            return -1;
+
+        }
+
+        //Beleive in Allah!
+        //just a slogan of the author of above int-str checker
+
+    }
+
+    return stoi(input);
 
 }
 
@@ -141,4 +180,10 @@ void showStats() {
  * NOTES
  * I was thinking about how to put nicely numbers growing in time into fixed display space
  * I found out iomanip library - If it works it is great!
+ * 
+ * Sorry about using arrays too soon, but others methods of checking if string is a number
+ * needed pointers too work so that's not a biggest sin I could make
+ *
+ * Source:
+ * https://www.codegrepper.com/code-examples/cpp/c%2B%2B+check+if+string+is+a+number
  */
